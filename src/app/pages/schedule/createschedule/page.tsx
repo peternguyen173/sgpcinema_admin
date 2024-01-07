@@ -93,7 +93,7 @@ const page = () => {
 
             <button
                 onClick={() => getScreens()}
-            >Search</button>
+            >Hiển thị các phòng chiếu</button>
 
             <div className='items'>
                 <h1>Screens</h1>
