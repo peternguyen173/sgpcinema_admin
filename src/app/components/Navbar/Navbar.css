@@ -1,0 +1,43 @@
+.navbar {
+    background-color: #333444;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 20px;
+}
+
+
+.navbar .logo {
+    margin: 10px;
+}
+
+.navbar a {
+    padding: 5px;
+    text-decoration: none;
+    background-color: #fff;
+    color: black;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+.navbar a:hover {
+    background-color: rgb(248, 68, 100);
+    ;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.navbar button {
+    padding-top: 7px;
+    height: 30px;
+}
+
+.navbar button:hover {
+    padding-top: 7px;
+    height: 30px;
+    background-color: rgb(248, 68, 100);
+    ;
+}

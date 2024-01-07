@@ -1,0 +1,16 @@
+.s {
+    margin-left: 40px;
+    margin-right: 40px;
+    border: 1px solid;
+    /* Thêm đường viền */
+
+}
+
+Swiper {
+    box-shadow: 3px;
+
+}
+
+.banner {
+    padding: 30px;
+}
