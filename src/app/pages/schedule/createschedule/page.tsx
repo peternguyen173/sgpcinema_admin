@@ -43,6 +43,8 @@ const page = () => {
     const [city, setCity] = React.useState('')
     const [screens, setScreens] = React.useState<Screen[]>([])
     const [movies, setMovies] = React.useState<Movie[]>([])
+    const [showMovieList, setShowMovieList] = React.useState(false);
+
 
     const getMovies = async () => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/movie/movies`)
@@ -93,10 +95,9 @@ const page = () => {
 
             <button
                 onClick={() => getScreens()}
-            >Hiển thị các phòng chiếu</button>
+            ><h2>Hiển thị các phòng chiếu</h2></button>
 
             <div className='items'>
-                <h1>Screens</h1>
                 {
                     screens?.map((screen, index) => (
                         <div className={
@@ -112,9 +113,11 @@ const page = () => {
                     ))}
             </div>
 
+            <button onClick={() => setShowMovieList(!showMovieList)}>
+                <h2>Hiển thị danh sách phim</h2>
+            </button>
 
-            <div className='items'>
-                <h1>Movies</h1>
+            <div className='items' style={{ display: showMovieList ? '' : 'none' }}>
                 {
                     movies?.map((movie, index) => (
                         <div className={

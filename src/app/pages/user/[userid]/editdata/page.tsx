@@ -41,6 +41,7 @@ const EditProfilePage = () => {
             .then((res) => res.json())
             .then((data) => {
                 if (data.ok) {
+                    data.data.password = "";
                     setUser(data.data);
                 } else {
                     console.log(data);
@@ -56,8 +57,14 @@ const EditProfilePage = () => {
     }, []);
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
-        setUser({ ...user, [id]: value });
+        if (id === 'password') { // Nếu người dùng đang nhập mật khẩu mới
+            setNewPassword(value); // Cập nhật state cho newPassword
+            setUser({ ...user, password: value }); // Cập nhật trường password trong user
+        } else {
+            setUser({ ...user, [id]: value });
+        }
     };
+
     const handleShowPasswordInput = () => {
 
         setShowPasswordInput(true); // Hiển thị ô nhập mật khẩu mới khi ấn vào ô cần đổi mật khẩu\
@@ -84,6 +91,18 @@ const EditProfilePage = () => {
             alert('Mật khẩu xác nhận không khớp');
             return;
         }
+        if (user.email.length === 0) {
+            alert('Bạn chưa nhập vào email thay đổi');
+            return;
+        }
+        if (user.name.length === 0) {
+            alert('Bạn chưa nhập vào Name thay đổi');
+            return;
+        }
+        if (user.phonenumber.length === 0) {
+            alert('Bạn chưa nhập vào Số điện thoại thay đổi');
+            return;
+        }
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/admin/updateuserbyid/${userid}`, {
                 method: 'POST',
@@ -93,7 +112,7 @@ const EditProfilePage = () => {
                 credentials: 'include',
                 body: JSON.stringify(user),
             });
-
+            console.log(user.password)
             const data = await response.json();
             if (data.ok) {
                 // Xử lý thành công, có thể hiển thị thông báo, chuyển hướng trang, hoặc cập nhật local state nếu cần thiết
@@ -187,7 +206,7 @@ const EditProfilePage = () => {
                                             type='password'
                                             id='password'
                                             value={newPassword}
-                                            onChange={(e) => setNewPassword(e.target.value)}
+                                            onChange={handleInputChange}
                                         />
                                     </div>
                                 )}

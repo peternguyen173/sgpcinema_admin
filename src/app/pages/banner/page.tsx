@@ -10,6 +10,7 @@ import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules';
 import Image from 'next/image';
 
 interface Banner {
+    _id: string;
     imageUrl: string;
     // Các trường thông tin khác liên quan đến banner
 }
@@ -158,6 +159,40 @@ const bannerPage = () => {
         }
     };
 
+    const removeBanner = async (bannerId: string) => {
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_BACKEND_API}/banner/banners/${bannerId}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                }
+            );
+
+            if (response.ok) {
+                setBanners1((prevBanners) =>
+                    prevBanners.filter((banner) => banner.imageUrl !== bannerId)
+                );
+                toast.success('Banner removed successfully', {
+                    position: toast.POSITION.TOP_CENTER,
+                });
+            } else {
+                const data = await response.json();
+                console.error(`Failed to remove banner: ${data.error}`);
+                toast.error('Failed to remove the banner', {
+                    position: toast.POSITION.TOP_CENTER,
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            toast.error('An error occurred while removing the banner', {
+                position: toast.POSITION.TOP_CENTER,
+            });
+        }
+    };
 
 
 
@@ -172,7 +207,8 @@ const bannerPage = () => {
                 onChange={handleFileChange}
             />
             <button onClick={handleUpload}>Tạo banner</button>
-            <button onClick={saveBanners}>Lưu banner</button>
+            <a href="/pages/banner">
+                <button onClick={saveBanners}>Lưu banner</button></a>
 
             <ToastContainer />
             {/* Hiển thị danh sách các URL ảnh */}
@@ -194,10 +230,14 @@ const bannerPage = () => {
                         banners1.map((banner, index) => {
                             return (
                                 <SwiperSlide key={index}>
-                                    <Image src={banner.imageUrl} alt="" width={width} height={height / 2}
+                                    <Image src={banner.imageUrl} alt="" width={width} height={height}
                                         style={{
                                             objectFit: "cover"
                                         }} />
+                                    <a href="/pages/banner">
+                                        <button onClick={() => removeBanner(banner._id)}>
+                                            Remove Banner
+                                        </button></a>
                                 </SwiperSlide>
                             )
                         })

@@ -12,11 +12,15 @@ input {
 }
 
 button {
+  background-color: #4caf50;
   padding: 10px;
   margin: 5px;
   border: 1px solid #ccc;
   cursor: pointer;
+  border-radius: 4px;
+  color: white;
 }
+
 
 button:hover {
   background-color: #1f1f1f;

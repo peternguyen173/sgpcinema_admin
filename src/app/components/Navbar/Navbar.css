@@ -37,7 +37,32 @@
 
 .navbar button:hover {
     padding-top: 7px;
-    height: 30px;
     background-color: rgb(248, 68, 100);
     ;
+}
+
+.link {
+    position: relative;
+    display: inline-block;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.link:hover .menu {
+    display: block;
+}
+
+.menu button {
+    height: auto;
+    /* Hoặc set height lớn hơn */
+    /* Điều chỉnh padding để tạo không gian cho văn bản */
+    /* Các thuộc tính khác của nút */
 }

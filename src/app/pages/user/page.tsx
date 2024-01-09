@@ -1,62 +1,81 @@
 "use client"
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import "./user.css"
+import "./user.css";
+interface User {
+    _id: string;
+    name: string;
+    email: string;
+    // other properties if there are any
+}
 const UserSearchPage: React.FC = () => {
-    const router = useRouter();
-    const [email, setEmail] = useState('');
-    const [userId, setUserId] = useState('');
-    const [userName, setUserName] = useState('');
+    // const router = useRouter();
+    // const [email, setEmail] = useState('');
+    // const [userId, setUserId] = useState('');
+    // const [userName, setUserName] = useState('');
 
+    const router = useRouter();
+    const [userName, setUserName] = useState('');
+    const [users, setUsers] = useState<User[]>([]);
+    const [notification, setNotification] = useState<string>(''); // New state for the notification
 
     const handleSearch = async () => {
-        if (email.trim() !== '') {
+        if (userName.trim() !== '') {
             try {
-                // Gửi yêu cầu đến server để lấy ID từ email
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/admin/getuserbyemail/${email}`);
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/admin/getuserbyemail/${userName}`);
                 const data = await response.json();
 
                 if (data.ok) {
-                    // Nếu server trả về dữ liệu OK, cập nhật state với ID tìm được
-                    setUserId(data.data._id);
-                    setUserName(data.data.name);
+                    setUsers(data.data);
+                    setNotification(''); // Reset the notification if there are users found
                 } else {
-                    // Xử lý khi không tìm thấy user
-                    setUserId('User not found');
-                    setUserName('User not found');
-
+                    setUsers([]);
+                    setNotification('User not found');
                 }
             } catch (error) {
-                // Xử lý lỗi trong quá trình gửi yêu cầu
                 console.error('Error fetching data:', error);
-                setUserId('Error fetching data');
-                setUserName('Error fetching data');
-
+                setUsers([]);
+                setNotification('Error fetching data');
             }
         }
     };
 
-    const handleViewInfo = () => {
-        // Chuyển hướng đến `/user/${userId}` khi nhấn nút Xem thông tin
-        window.location.href = `/user/${userId}`;
-
+    const handleViewInfo = (userId: string) => {
+        window.location.href = `/pages/user/${userId}`;
     };
 
     return (
+
         <div className='page'>
-            <h1>User Search</h1>
+            <h1>Tìm kiếm người dùng</h1>
             <input
-                type="email"
-                placeholder="Nhập email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                placeholder="Nhập vào email người dùng"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
             />
             <button onClick={handleSearch}>Tìm kiếm</button>
-            <p>Tên người dùng: {userName} {userName && ( // Hiển thị nút Xem thông tin nếu userName không rỗng
-                <button onClick={() => router.push(`/pages/user/${userId}`)}>Xem thông tin</button>
-            )}</p>
 
-        </div >
+            <div className="user-list">
+                {users.length !== 0 ? (
+                    <ul className="list-grid">
+                        {users.map((user, index) => (
+                            user.email && (
+                                <li key={index}>
+                                    <p>{user.email}</p>
+                                    <button className="view-info" onClick={() => handleViewInfo(user._id)}>
+                                        Xem thông tin chi tiết
+                                    </button>
+                                </li>
+                            )
+                        ))}
+                    </ul>
+                ) : (
+                    <p>{notification}</p>
+                )}
+            </div>
+        </div>
+
     );
 };
 

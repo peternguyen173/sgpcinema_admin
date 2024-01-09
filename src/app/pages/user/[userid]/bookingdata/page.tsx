@@ -141,7 +141,7 @@ const ProfilePage = () => {
     };
     return (
         <div className='profile'>
-            <a href="/profile">
+            <a href={`/pages/user/${userid}`}>
                 <button className='btn1'><h2>Quay lại</h2></button>
             </a><h1 className='head'>Lịch sử đặt vé</h1>
             <div className='user'>
@@ -233,7 +233,7 @@ const ProfilePage = () => {
                 </div>
             </div>
 
-        </div>
+        </div >
     )
 }
 
